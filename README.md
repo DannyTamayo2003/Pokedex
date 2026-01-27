@@ -17,3 +17,6 @@ PROBLEMI RISCONTRATI
 
 OBIETTIVO
 - sviluppare tutto in puro JavaScript con la (DOM manipulation)
+- 
+LINK SITO
+- https://dannytamayo2003.github.io/Pokedex/
