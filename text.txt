@@ -17,6 +17,3 @@ PROBLEMI RISCONTRATI
 
 OBIETTIVO
 - sviluppare tutto in puro JavaScript con la (DOM manipulation)
-
-prova
-
