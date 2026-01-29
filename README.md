@@ -1,4 +1,4 @@
-PROGETTO: Pkédex API
+PROGETTO: Pokédex API
 
 DESCRIZIONE ATTIVITÀ
 Sto sviluppando una web semplicissima app che utilizza la PokeAPI per visualizzare
