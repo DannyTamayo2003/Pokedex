@@ -1,67 +1,349 @@
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap");
+
+/* Variabili globali: palette Pokemon, colori base e ombre riusabili. */
+:root {
+    --poke-red: #e3350d;
+    --poke-red-dark: #b71f00;
+    --poke-yellow: #ffcb05;
+    --poke-blue: #2a75bb;
+    --poke-blue-dark: #1a4f87;
+    --ink: #eaf4ff;
+    --muted: #a8c3df;
+    --paper: #102741;
+    --panel: #142d49;
+    --stroke: rgba(162, 203, 242, 0.34);
+    --shadow-soft: 0 14px 32px rgba(2, 8, 16, 0.42);
+    --shadow-hard: 0 18px 42px rgba(2, 8, 16, 0.55);
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    padding: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: #e5e7eb;
-
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: var(--ink);
+    font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+    background:
+        radial-gradient(1000px 420px at -8% -12%, rgba(255, 203, 5, 0.26), transparent 70%),
+        radial-gradient(780px 420px at 108% 8%, rgba(42, 117, 187, 0.38), transparent 72%),
+        radial-gradient(620px 260px at 52% 108%, rgba(227, 53, 13, 0.2), transparent 70%),
+        linear-gradient(160deg, #071526, #0c2138 48%, #102945);
+    padding: 24px;
 }
 
+/* LAYOUT PAGINA DETTAGLIO */
 #container {
-    background-color: green;
-    width: 100%;
-    height: 90vh;
+    width: min(1160px, 100%);
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.backHomeButton {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 9px 15px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--poke-red), var(--poke-red-dark));
+    color: #ffffff;
+    border: 1px solid rgba(255, 203, 5, 0.42);
+    box-shadow: var(--shadow-soft);
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
 
-    padding: 20px;
-
-
+.backHomeButton:hover {
+    transform: translateY(-2px);
+    border-color: var(--poke-yellow);
+    box-shadow: var(--shadow-hard);
 }
 
 #pokemonContainer {
-    background-color: red;
-    width: 100%;
-
-
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: minmax(280px, 430px) minmax(320px, 1fr);
+    gap: 18px;
+    align-items: stretch;
 }
 
+#boxImg,
+#details,
+#evoluzioniContainer {
+    background: var(--panel);
+    border: 2px solid var(--stroke);
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* PANNELLO IMMAGINE */
+#boxImg {
+    background:
+        radial-gradient(220px 150px at 22% 20%, rgba(255, 255, 255, 0.18), transparent 70%),
+        radial-gradient(300px 220px at 78% 82%, var(--type-soft, rgba(42, 117, 187, 0.32)), transparent 72%),
+        linear-gradient(150deg, #163456, #1b416d 42%, #205589);
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#boxImg::before {
+    content: "";
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, var(--type-soft, rgba(255, 203, 5, 0.58)), transparent 66%);
+}
+
+#boxImg::after {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    border: 14px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+/* Immagine ufficiale del pokemon: resta sopra agli pseudo-elementi decorativi. */
 #imgPokemon {
+    width: min(320px, 78%);
+    height: auto;
+    z-index: 1;
+    filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.5));
+    animation: floatIn 0.45s ease-out;
+}
 
+/* PANNELLO DATI */
+#details {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)),
+        linear-gradient(170deg, #173552, #102a45 60%, #0e2741);
+    border-top: 5px solid var(--type-color, var(--poke-red));
+    padding: 22px;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+}
+
+#pokemonName {
+    margin: 0;
+    font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+    letter-spacing: 0.04em;
+    text-transform: capitalize;
+    color: var(--poke-yellow);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#details hr {
     width: 100%;
-    height: 100%;
+    border: 0;
+    height: 1px;
+    margin: 0;
+    background: linear-gradient(90deg, transparent, rgba(173, 211, 246, 0.48), transparent);
+}
 
+/* BADGE TIPI */
+#boxTypesElement {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#types1Element,
+#types2Element {
+    margin: 0;
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: var(--type-soft, rgba(42, 117, 187, 0.14));
+    border: 1px solid var(--type-color, rgba(42, 117, 187, 0.32));
+    color: #ffffff;
+    text-transform: capitalize;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+}
+
+#types1Element:hover,
+#types2Element:hover {
+    transform: translateY(-1px);
+    background: var(--type-color, rgba(42, 117, 187, 0.22));
+    border-color: var(--type-color, #1a4f87);
+    color: #ffffff;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+}
+
+/* STATISTICHE */
+#boxStats {
+    display: grid;
+    gap: 8px;
 }
 
 #boxStats ul {
+    margin: 0;
     padding: 0;
+    display: grid;
+    gap: 6px;
 }
 
 .liClassStyle {
-   list-style: none;
+    list-style: none;
+    color: #e4f2ff;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(5, 16, 28, 0.25));
+    border: 1px solid rgba(162, 203, 242, 0.34);
+    border-radius: 12px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
+.liClassStyle:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(180deg, var(--type-soft, rgba(42, 117, 187, 0.24)), rgba(3, 10, 19, 0.2));
+    border-color: var(--type-color, #8ab5dd);
+    color: #ffffff;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+}
 
+#heightElement,
+#weightElement {
+    color: #f2f8ff;
+    font-weight: 700;
+}
+
+#boxAbilities {
+    min-height: 8px;
+}
+
+/* SEZIONE EVOLUZIONI */
 #evoluzioniContainer {
-    background-color: blue;
-    width: 100%;
-    height: 20%;
-    margin-top: 10px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)),
+        linear-gradient(180deg, #123251, #102946 58%, #0c233a);
+    border-top: 5px solid var(--type-color, var(--poke-blue));
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    align-items: stretch;
+}
+
+/* Card cliccabile per ogni evoluzione successiva. */
+.evolutionCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 14px;
+    border-radius: 16px;
+    border: 2px solid rgba(162, 203, 242, 0.36);
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.12), rgba(11, 29, 48, 0.4));
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    box-shadow: var(--shadow-soft);
+}
+
+.evolutionCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hard);
+    border-color: var(--poke-yellow);
+}
+
+.evolutionCard img {
+    width: 108px;
+    height: 108px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 7px 14px rgba(0, 0, 0, 0.2));
+}
+
+.evolutionCard p {
+    margin: 0;
+    font-size: 0.92rem;
+    text-transform: capitalize;
+    color: #edf6ff;
+    font-weight: 700;
+}
+
+/* Stato mostrato quando il pokemon non ha evoluzioni successive. */
+.noEvolutionText {
+    margin: 0;
+    text-align: center;
+    color: #ffffff;
+    font-weight: 700;
+    background: linear-gradient(180deg, var(--type-soft, rgba(42, 117, 187, 0.32)), rgba(8, 23, 40, 0.32));
+    border: 1px solid rgba(162, 203, 242, 0.38);
+    border-radius: 12px;
+    padding: 10px 12px;
 }
 
 #boxElement {
     display: flex;
     gap: 20px;
+}
+
+/* Animazione leggera all'arrivo dell'artwork. */
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Responsive tablet: immagine e dettagli passano uno sotto l'altro. */
+@media (max-width: 960px) {
+    body {
+        padding: 16px;
+    }
+
+    #pokemonContainer {
+        grid-template-columns: 1fr;
+    }
+
+    #boxImg {
+        min-height: 280px;
+    }
+
+    #imgPokemon {
+        width: min(260px, 72%);
+    }
+}
+
+/* Responsive mobile: card evoluzioni piu compatte. */
+@media (max-width: 560px) {
+    #details,
+    #boxImg,
+    #evoluzioniContainer {
+        border-radius: 18px;
+    }
+
+    #evoluzioniContainer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .evolutionCard {
+        padding: 10px;
+    }
+
+    .evolutionCard img {
+        width: 86px;
+        height: 86px;
+    }
 }

@@ -9,10 +9,19 @@
 </head>
 
 <body>
+    <!--
+        PAGINA DETTAGLIO
+        Il nome del pokemon arriva dalla URL, poi detailPage.js popola immagine,
+        statistiche, tipi e prossime evoluzioni.
+    -->
 
+    <!-- Contenitore principale della pagina dettaglio -->
     <div id="container">
 
+        <!-- Link per tornare alla home/lista pokemon -->
+        <a class="backHomeButton" href="index.html">Torna alla home</a>
 
+        <!-- Blocco alto: immagine pokemon + dati principali -->
         <div id="pokemonContainer">
 
             <div id="boxImg">
@@ -21,10 +30,11 @@
             </div>
 
 
-            <div id="details">informazioni pokemon
+            <div id="details">
 
                 <h1 id="pokemonName"></h1>
                 <hr>
+                <!-- Tipi elementali del pokemon -->
                 <div id="boxTypesElement">
 
                     <div>
@@ -38,6 +48,7 @@
                 </div>
                 <hr>
 
+                <!-- Statistiche + misure -->
                 <div id="boxStats">
                     <ul id="statsList"></ul>
                     <li id="heightElement" class="liClassStyle"></li>
@@ -50,7 +61,8 @@
 
         </div>
 
-        <div id="evoluzioniContainer">Evoluzioni</div>
+        <!-- Blocco basso: evoluzioni cliccabili -->
+        <div id="evoluzioniContainer"></div>
 
     </div>
 
