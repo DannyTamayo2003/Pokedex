@@ -1,22 +1,32 @@
-PROGETTO: Pokédex API
+# Pokédex 2.0
 
-DESCRIZIONE ATTIVITÀ
-Sto sviluppando una web semplicissima app che utilizza la PokeAPI per visualizzare
-i Pokémon sotto forma di card.
+A web app built with vanilla JavaScript that lets you browse, search and filter Pokémon using the [PokéAPI](https://pokeapi.co/).
 
-IMPLEMENTAZIONE ATTUALE
-- Input ricerca
-- Fetch della lista Pokémon
-- Seconda fetch per recuperare dettagli
-- Visualizzazione nome e abilità
-- Creazione dinamica delle card con JavaScript
-- Contatore dinamico di quanti pokemon ci sono
+## Features
 
-PROBLEMI RISCONTRATI
-- Gestione asincrona delle richieste multiple (risolto)
+**Home page**
+- Grid of Pokémon cards loaded in batches of 20 with a "Load more" button
+- Real-time search by name
+- Filter by type (18 types with SVG icons) — click a type to filter, click again to clear
+- Pokémon count shown live as you search
 
-OBIETTIVO
-- sviluppare tutto in puro JavaScript con la (DOM manipulation)
-- 
-LINK SITO
-- https://dannytamayo2003.github.io/Pokedex/
+**Detail page**
+- Official artwork
+- Type badges with per-type color theming
+- Base stats, height and weight
+- Evolution stage badge (Stage 1 / 2 / 3)
+- Full evolution chain — shows both previous and next stages as clickable cards
+
+## Tech stack
+
+- HTML, CSS, vanilla JavaScript — no frameworks or build tools
+- [PokéAPI](https://pokeapi.co/) for all Pokémon data
+- In-memory cache to avoid duplicate fetches
+
+## How to run
+
+Open `index.html` in a browser. No install or build step needed.
+
+## Live demo
+
+[https://dannytamayo2003.github.io/Pokedex/](https://dannytamayo2003.github.io/Pokedex/)
