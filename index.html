@@ -4,10 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex Full js</title>
+    <title>Pokedex 2.0</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!--
+        HOME PAGE
+        Il JS riempie dinamicamente boxCategorie e boxPokemon usando i dati della PokeAPI.
+    -->
+
+    <!-- Header con logo del progetto -->
+    <header class="siteHeader">
+        <img id="logo" class="titoloStyle" src="immagini/International_Pokémon_logo.svg" alt="International Pokémon logo">
+    </header>
+
+    <!-- Area principale: ricerca, filtri e lista pokemon -->
+    <main class="siteMain">
+        <!-- Barra ricerca + contatore risultati visibili -->
+        <div class="searchBox">
+            <input type="text" id="inputRicerca" placeholder="Search a Pokémon...">
+            <p id="contaPokemon">0 Pokémon found</p>
+        </div>
+
+        <!-- Icone categorie (tipi elementali) -->
+        <div id="boxCategorie" class="categoryGrid"></div>
+        <!-- Griglia card pokemon -->
+        <div id="boxPokemon" class="pokemonGrid"></div>
+        <!-- Paginazione semplice: carica prossimi 20 -->
+        <div class="loadMoreBox">
+            <button id="loadMoreButton" class="loadMoreButton" type="button">Load 20 more</button>
+        </div>
+    </main>
+
+    <footer class="siteFooter">Pokédex 2.0</footer>
+
     <script src="script.js"></script>
 </body>
 
