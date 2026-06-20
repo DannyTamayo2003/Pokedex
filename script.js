@@ -34,26 +34,26 @@ let allOffset = 0;
 let allTotal = 0;
 let isLoading = false;
 
-// Simboli usati nelle icone dei tipi
+// Percorsi delle icone SVG per ogni tipo
 const simboliTipo = {
-  normal: "◯",
-  fire: "🔥",
-  water: "💧",
-  electric: "⚡",
-  grass: "🌿",
-  ice: "❄️",
-  fighting: "🥊",
-  poison: "☠️",
-  ground: "⛰️",
-  flying: "🪽",
-  psychic: "🔮",
-  bug: "🪲",
-  rock: "🪨",
-  ghost: "👻",
-  dragon: "🐉",
-  dark: "🌑",
-  steel: "⚙️",
-  fairy: "✨"
+  normal:   "icons/normal.svg",
+  fire:     "icons/fire.svg",
+  water:    "icons/water.svg",
+  electric: "icons/electric.svg",
+  grass:    "icons/grass.svg",
+  ice:      "icons/ice.svg",
+  fighting: "icons/fighting.svg",
+  poison:   "icons/poison.svg",
+  ground:   "icons/ground.svg",
+  flying:   "icons/flying.svg",
+  psychic:  "icons/psychic.svg",
+  bug:      "icons/bug.svg",
+  rock:     "icons/rock.svg",
+  ghost:    "icons/ghost.svg",
+  dragon:   "icons/dragon.svg",
+  dark:     "icons/dark.svg",
+  steel:    "icons/steel.svg",
+  fairy:    "icons/fairy.svg"
 };
 
 // Colori tema per tipo pokemon (usati in card e filtri)
@@ -125,9 +125,10 @@ function creaCardCategorie() {
     cardCategoria.setAttribute("aria-label", tipo);
     applyColoriTipo(cardCategoria, tipo);
 
-    const iconCategoria = document.createElement("span");
+    const iconCategoria = document.createElement("img");
     iconCategoria.classList.add("categoryIcon");
-    iconCategoria.textContent = simboliTipo[tipo];
+    iconCategoria.src = simboliTipo[tipo];
+    iconCategoria.alt = tipo;
     cardCategoria.appendChild(iconCategoria);
 
     const nomeCategoria = document.createElement("span");
@@ -340,7 +341,7 @@ function aggiornaEmptyState(count) {
   const emptyState = document.createElement("p");
   emptyState.id = "emptyState";
   emptyState.classList.add("emptyState");
-  emptyState.textContent = "Nessun Pokémon trovato con i filtri attuali.";
+  emptyState.textContent = "No Pokémon found with the current filters.";
   boxPokemon.appendChild(emptyState);
 }
 
@@ -361,7 +362,7 @@ function applyRicerca() {
     }
   });
 
-  contatorePokemon.textContent = `${count} Pokémon trovati`;
+  contatorePokemon.textContent = `${count} Pokémon found`;
   aggiornaEmptyState(count);
 }
 
@@ -410,43 +411,43 @@ function aggiornaStatoPulsante() {
 
   if (isLoading) {
     loadMoreButton.disabled = true;
-    loadMoreButton.textContent = "Caricamento...";
+    loadMoreButton.textContent = "Loading...";
     return;
   }
 
   if (!tipoSelezionato) {
     if (allTotal > 0 && allOffset >= allTotal) {
       loadMoreButton.disabled = true;
-      loadMoreButton.textContent = "Hai visto tutti i Pokémon";
+      loadMoreButton.textContent = "You've seen all Pokémon";
       return;
     }
 
     loadMoreButton.disabled = false;
-    loadMoreButton.textContent = "Carica altri 20";
+    loadMoreButton.textContent = "Load 20 more";
     return;
   }
 
   const typeState = typeStateMap.get(tipoSelezionato);
   if (!typeState) {
     loadMoreButton.disabled = true;
-    loadMoreButton.textContent = "Caricamento...";
+    loadMoreButton.textContent = "Loading...";
     return;
   }
 
   if (typeState.entries.length === 0) {
     loadMoreButton.disabled = true;
-    loadMoreButton.textContent = "Nessun Pokémon per questo tipo";
+    loadMoreButton.textContent = "No Pokémon for this type";
     return;
   }
 
   if (typeState.loadedCount >= typeState.entries.length) {
     loadMoreButton.disabled = true;
-    loadMoreButton.textContent = "Fine categoria";
+    loadMoreButton.textContent = "End of category";
     return;
   }
 
   loadMoreButton.disabled = false;
-  loadMoreButton.textContent = "Carica altri 20";
+  loadMoreButton.textContent = "Load 20 more";
 }
 
 // Click su "Carica altri": decide se caricare vista generale o filtro tipo

@@ -157,8 +157,8 @@ body {
 }
 
 .categoryIcon {
-	font-size: 1.75rem;
-	line-height: 1;
+	width: 1.75rem;
+	height: 1.75rem;
 	filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.22));
 }
 

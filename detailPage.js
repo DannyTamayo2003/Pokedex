@@ -79,10 +79,9 @@ async function initDetailPage() {
         const speciesData = await fetchJson(pokemonData.species.url);
         const evolutionData = await fetchJson(speciesData.evolution_chain.url);
 
-        // Prende solo le prossime evoluzioni rispetto al pokemon attuale
-        const nextEvolutionStages = getNextEvolutionStages(evolutionData.chain, currentPokemonName);
-
-        displayEvolutionChain(nextEvolutionStages);
+        const { previousStages, nextStages, stageNumber } = getEvolutionData(evolutionData.chain, currentPokemonName);
+        displayEvolutionChain(previousStages, nextStages);
+        displayStageNumber(stageNumber);
     } catch (error) {
         console.error("Errore:", error);
     }
@@ -99,12 +98,14 @@ async function fetchJson(url) {
 
 // Render dati testuali e immagine nel pannello dettaglio
 function displayPokemonDetails(pokemonNameValue, types1, types2, officialArtwork, height, weight) {
+    document.title = `${pokemonNameValue} — Pokédex 2.0`;
+
     const nameElement = document.getElementById("pokemonName");
     nameElement.textContent = pokemonNameValue;
 
     const imgPokemon = document.getElementById("imgPokemon");
     imgPokemon.src = officialArtwork;
-    imgPokemon.alt = `Immagine di ${pokemonNameValue}`;
+    imgPokemon.alt = `Image of ${pokemonNameValue}`;
 
     const types1Element = document.getElementById("types1Element");
     types1Element.textContent = types1;
@@ -130,10 +131,10 @@ function displayPokemonDetails(pokemonNameValue, types1, types2, officialArtwork
     applyColoriTipo(boxImg, types1);
 
     const heightElement = document.getElementById("heightElement");
-    heightElement.textContent = `Altezza: ${height} m`;
+    heightElement.textContent = `Height: ${height} m`;
 
     const weightElement = document.getElementById("weightElement");
-    weightElement.textContent = `Peso: ${weight} kg`;
+    weightElement.textContent = `Weight: ${weight} kg`;
 }
 
 // Render lista statistiche
@@ -153,49 +154,51 @@ function renderStats(stats) {
     statsList.appendChild(fragment);
 }
 
-// Dalla catena completa evoluzioni prende max 2 step successivi
-function getNextEvolutionStages(chainRoot, currentName) {
-    const currentNode = findEvolutionNode(chainRoot, currentName);
-    if (!currentNode) {
-        return [];
+// Trova il percorso dalla radice della catena al pokemon corrente
+function findPath(node, targetName) {
+    if (node.species.name === targetName) {
+        return [node];
     }
-
-    const stages = [];
-    let cursor = currentNode;
-
-    // Prendiamo al massimo due evoluzioni successive per tenere la UI compatta.
-    while (cursor.evolves_to && cursor.evolves_to.length > 0 && stages.length < 2) {
-        const nextNode = cursor.evolves_to[0];
-        stages.push({
-            name: nextNode.species.name,
-            speciesUrl: nextNode.species.url
-        });
-        cursor = nextNode;
+    for (const next of node.evolves_to || []) {
+        const path = findPath(next, targetName);
+        if (path) return [node, ...path];
     }
-
-    return stages;
+    return null;
 }
 
-// Ricerca ricorsiva del nodo corrente nella catena evolutiva
-function findEvolutionNode(node, targetName) {
-    if (!node) {
-        return null;
+// Raccoglie ricorsivamente tutte le fasi successive al nodo corrente
+function getAllNextStages(node) {
+    const result = [];
+    for (const next of node.evolves_to || []) {
+        result.push({ name: next.species.name, speciesUrl: next.species.url });
+        result.push(...getAllNextStages(next));
+    }
+    return result;
+}
+
+// Restituisce fasi precedenti, successive e numero stadio del pokemon corrente
+function getEvolutionData(chainRoot, currentName) {
+    const path = findPath(chainRoot, currentName);
+    if (!path) {
+        return { previousStages: [], nextStages: [], stageNumber: 1 };
     }
 
-    // Caso base della ricorsione: abbiamo trovato il pokemon richiesto.
-    if (node.species?.name === targetName) {
-        return node;
-    }
+    const currentNode = path[path.length - 1];
 
-    // Caso ricorsivo: controlla ogni possibile evoluzione successiva.
-    for (const nextNode of node.evolves_to || []) {
-        const found = findEvolutionNode(nextNode, targetName);
-        if (found) {
-            return found;
-        }
-    }
+    const previousStages = path.slice(0, -1).map(node => ({
+        name: node.species.name,
+        speciesUrl: node.species.url
+    }));
 
-    return null;
+    const nextStages = getAllNextStages(currentNode);
+
+    return { previousStages, nextStages, stageNumber: path.length };
+}
+
+// Scrive il numero di stadio nel badge della pagina dettaglio
+function displayStageNumber(stageNumber) {
+    const stageElement = document.getElementById("stageElement");
+    stageElement.textContent = `Stage ${stageNumber}`;
 }
 
 // Ricava URL artwork ufficiale partendo dalla species URL (id numerico)
@@ -210,23 +213,24 @@ function getArtworkUrlFromSpeciesUrl(speciesUrl) {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`;
 }
 
-// Render card evoluzioni cliccabili
-function displayEvolutionChain(evolutionStages) {
+// Render card evoluzioni cliccabili (fasi precedenti + successive)
+function displayEvolutionChain(previousStages, nextStages) {
     const evoluzioniContainer = document.getElementById("evoluzioniContainer");
     evoluzioniContainer.replaceChildren();
 
-    // Se non ci sono evoluzioni, mostra un messaggio
-    if (!evolutionStages || evolutionStages.length === 0) {
+    const allStages = [...previousStages, ...nextStages];
+
+    if (allStages.length === 0) {
         const noEvolutionText = document.createElement("p");
         noEvolutionText.classList.add("noEvolutionText");
-        noEvolutionText.textContent = "Non si evolve";
+        noEvolutionText.textContent = "Does not evolve";
         evoluzioniContainer.appendChild(noEvolutionText);
         return;
     }
 
     const fragment = document.createDocumentFragment();
 
-    evolutionStages.forEach(stage => {
+    allStages.forEach(stage => {
         // Ogni evoluzione e una card cliccabile che riapre questa pagina con un nuovo nome.
         const evolutionCard = document.createElement("div");
         evolutionCard.classList.add("evolutionCard");

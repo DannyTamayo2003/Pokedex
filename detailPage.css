@@ -144,6 +144,18 @@ body {
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+#stageElement {
+    margin: 0;
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 203, 5, 0.14);
+    border: 1px solid rgba(255, 203, 5, 0.4);
+    color: #ffe38a;
+}
+
 #details hr {
     width: 100%;
     border: 0;
@@ -264,7 +276,6 @@ body {
     width: 108px;
     height: 108px;
     object-fit: contain;
-    image-rendering: pixelated;
     filter: drop-shadow(0 7px 14px rgba(0, 0, 0, 0.2));
 }
 
